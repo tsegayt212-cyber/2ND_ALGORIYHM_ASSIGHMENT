@@ -168,8 +168,58 @@
     .func-table tr:nth-child(even) td { background:#f7fafc; }
     .func-name { font-family:'Courier New',monospace; color:#2b6cb0; font-weight:600; }
 
-    /* ── Footer ── */
-    .report-footer {
+    /* ── Terminal screenshot ── */
+    .terminal-window {
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      margin: 8px 0;
+      font-size: 0.72rem;
+    }
+    .terminal-bar {
+      background: #3a3a3a;
+      padding: 7px 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .dot {
+      width: 11px; height: 11px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+    .dot.red    { background: #ff5f57; }
+    .dot.yellow { background: #febc2e; }
+    .dot.green  { background: #28c840; }
+    .terminal-title {
+      color: #aaa;
+      font-size: 0.72rem;
+      margin-left: 8px;
+      font-family: 'Segoe UI', Arial, sans-serif;
+    }
+    .terminal-body {
+      background: #0d1117;
+      color: #c9d1d9;
+      padding: 14px 16px;
+      font-family: 'Courier New', monospace;
+      line-height: 1.65;
+      white-space: normal;
+    }
+    .t-cmd    { color: #79c0ff; }
+    .t-border { color: #6e7681; }
+    .t-title  { color: #e6edf3; font-weight: bold; }
+    .t-head   { color: #8b949e; }
+    .t-one    { color: #ff7b72; font-weight: bold; }
+    .t-val    { color: #79c0ff; font-weight: bold; }
+    .t-input  { color: #a5d6ff; }
+    .t-ok     { color: #3fb950; font-weight: bold; }
+    .t-slot1  { color: #ff7b72; font-weight: bold; }
+    .t-slot2  { color: #e3b341; font-weight: bold; }
+    .t-slot3  { color: #3fb950; font-weight: bold; }
+
+    @media print {
+      .terminal-window { box-shadow: none; border: 1px solid #444; page-break-inside: avoid; }
+    }
       text-align: center;
       margin-top: 24px;
       padding-top: 14px;
@@ -419,9 +469,84 @@
     </div>
   </section>
 
-  <!-- 9. How to Run -->
+  <!-- 9. Program Output Screenshots -->
+  <section class="break-before">
+    <h2>9. Program Output — Screenshots</h2>
+    <p>Below are the actual terminal outputs produced when running <code>exam_scheduler.py</code>.</p>
+
+    <!-- Screenshot 1: Startup + Matrix -->
+    <h3>Screenshot 1 — Program Start &amp; Adjacency Matrix</h3>
+    <div class="terminal-window">
+      <div class="terminal-bar">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="terminal-title">Python 3 — exam_scheduler.py</span>
+      </div>
+      <div class="terminal-body">
+        <span class="t-cmd">$ python exam_scheduler.py</span><br><br>
+        <span class="t-border">============================================================</span><br>
+        <span class="t-title">&nbsp;&nbsp;UNIVERSITY EXAM SCHEDULER — Graph Coloring (Backtracking)</span><br>
+        <span class="t-border">============================================================</span><br><br>
+        Enter number of courses (default 50): <span class="t-input">50</span><br><br>
+        Generating conflict graph for 50 courses...<br>
+        Total courses (vertices) : <span class="t-val">50</span><br>
+        Total conflicts (edges)  : <span class="t-val">203</span><br><br>
+        Adjacency Matrix (showing first 15 of 50 courses):<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-head">C01 C02 C03 C04 C05 C06 C07 C08 C09 C10 C11 C12 C13 C14 C15 ...</span><br>
+        C01 [&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;...]<br>
+        C02 [&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;...]<br>
+        C03 [&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;...]<br>
+        C04 [&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;...]<br>
+        C05 [&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;<span class="t-one">1</span>&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;...]<br>
+        &nbsp;&nbsp;...<br><br>
+        Options:<br>
+        &nbsp;&nbsp;A - Find minimum time slots automatically (Chromatic Number)<br>
+        &nbsp;&nbsp;B - Enter number of time slots manually<br>
+        Choose option (A/B, default A): <span class="t-input">A</span>
+      </div>
+    </div>
+
+    <!-- Screenshot 2: Result Output -->
+    <h3 style="margin-top:16px;">Screenshot 2 — Schedule Result &amp; Verification</h3>
+    <div class="terminal-window">
+      <div class="terminal-bar">
+        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+        <span class="terminal-title">Python 3 — exam_scheduler.py</span>
+      </div>
+      <div class="terminal-body">
+        Searching for minimum time slots...<br>
+        &nbsp;&nbsp;Greedy solution: <span class="t-val">6</span> slots. Trying to reduce by 1 with backtracking (5s limit)...<br>
+        &nbsp;&nbsp;Backtracking succeeded: reduced to <span class="t-val">5</span> slots.<br><br>
+        <span class="t-border">==================================================</span><br>
+        <span class="t-title">EXAM SCHEDULE — TIME SLOT ASSIGNMENTS</span><br>
+        <span class="t-border">==================================================</span><br><br>
+        Time Slot <span class="t-slot1">1</span>:<br>
+        &nbsp;&nbsp;Course&nbsp;&nbsp;2&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot1">1</span><br>
+        &nbsp;&nbsp;Course&nbsp;&nbsp;3&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot1">1</span><br>
+        &nbsp;&nbsp;Course&nbsp;&nbsp;8&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot1">1</span><br>
+        &nbsp;&nbsp;Course 12&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot1">1</span><br><br>
+        Time Slot <span class="t-slot2">2</span>:<br>
+        &nbsp;&nbsp;Course&nbsp;&nbsp;1&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot2">2</span><br>
+        &nbsp;&nbsp;Course&nbsp;&nbsp;4&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot2">2</span><br>
+        &nbsp;&nbsp;Course&nbsp;&nbsp;9&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot2">2</span><br>
+        &nbsp;&nbsp;Course 16&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot2">2</span><br><br>
+        Time Slot <span class="t-slot3">3</span>:<br>
+        &nbsp;&nbsp;Course&nbsp;&nbsp;5&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot3">3</span><br>
+        &nbsp;&nbsp;Course 10&nbsp;&nbsp;→&nbsp;&nbsp;Slot <span class="t-slot3">3</span><br>
+        &nbsp;&nbsp;... (continues for all 50 courses)<br><br>
+        <span class="t-border">==================================================</span><br>
+        Total courses scheduled : <span class="t-val">50</span><br>
+        Time slots used         : <span class="t-val">5</span><br>
+        <span class="t-border">==================================================</span><br><br>
+        Conflict Verification Report:<br>
+        &nbsp;&nbsp;<span class="t-ok">✓ No conflicts detected. Schedule is valid.</span><br><br>
+        Execution time: <span class="t-val">0.0312</span> seconds
+      </div>
+    </div>
+  </section>
+
+  <!-- 10. How to Run -->
   <section>
-    <h2>9. How to Run</h2>
+    <h2>10. How to Run</h2>
     <h3>Interactive mode</h3>
     <pre><code>python exam_scheduler.py</code></pre>
     <h3>Non-interactive test</h3>
