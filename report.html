@@ -17,20 +17,7 @@
     }
 
     /* PDF button — screen only */
-    #pdf-btn {
-      position: fixed;
-      top: 16px; right: 16px;
-      background: #2b6cb0;
-      color: white;
-      border: none;
-      padding: 10px 22px;
-      border-radius: 6px;
-      font-size: 14px;
-      cursor: pointer;
-      z-index: 999;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    }
-    #pdf-btn:hover { background: #1a365d; }
+    #pdf-btn { display: none; }
 
     .page {
       width: 210mm;
@@ -475,6 +462,11 @@
     }
     tbody.appendChild(tr);
   }
+
+  // Auto-open print/save-as-PDF dialog when page loads
+  window.onload = function() {
+    setTimeout(function() { window.print(); }, 500);
+  };
 </script>
 
 </body>
