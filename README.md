@@ -6,66 +6,189 @@
 
 ---
 
-## Project Overview
+## Problem Context
 
-A Python project that solves the **Graph Coloring** problem for university exam scheduling using a **Backtracking** algorithm on a 50×50 adjacency matrix.
+A university must schedule final exams so that no student sits two exams at the same time.
+If two courses share students, they conflict and cannot share the same time slot.
 
-| Algorithm | Complexity | Approach |
-|---|---|---|
-| Greedy Coloring | O(n²) | Fast upper bound |
-| Backtracking | O(m^n) worst case | Optimal reduction |
+| Graph Element | Meaning |
+|---|---|
+| Vertices | Courses (50 total) |
+| Edges | Conflicts (shared students) |
+| Colors | Exam time slots |
 
 ---
 
 ## Project Structure
 
 ```
-2nd-algorithm-assignment/
+2ND_ALGORIYHM_ASSIGHMENT/
 ├── exam_scheduler.py        # Main interactive program
 ├── test_scheduler.py        # Non-interactive test runner
-├── generate_pdf_report.py   # Generates docs/Q6_Graph_Coloring_Report.pdf
-├── report.html              # HTML report (auto-opens PDF dialog)
+├── generate_pdf_report.py   # Generates the PDF report
+├── report.html              # HTML report
 ├── docs/
-│   ├── Q6_Graph_Coloring_Report.pdf   # Full PDF report
-│   └── screenshots/                   # Program output screenshots
+│   ├── Q6_Graph_Coloring_Report.pdf
+│   └── screenshots/
 └── README.md
 ```
 
 ---
 
-## Problem Context
-
-A university must schedule final exams so that no student sits two exams at the same time.
-
-- **Vertices** = Courses (50 total)
-- **Edges** = Conflicts (shared students between courses)
-- **Colors** = Exam time slots (minimum = chromatic number)
-
----
-
 ## Algorithm
 
-### Backtracking Graph Coloring
+Backtracking — tries each color per course, checks safety, recurses, backtracks on conflict.
 
 ```python
 def _backtrack(graph, num_colors, colors_assigned, course, deadline):
     if course == len(graph):
-        return True                    # All courses colored
+        return True                        # All courses colored
 
     for color in range(1, num_colors + 1):
         if is_safe(graph, course, color, colors_assigned):
             colors_assigned[course] = color
             if _backtrack(graph, num_colors, colors_assigned, course + 1, deadline):
                 return True
-            colors_assigned[course] = 0   # Backtrack
+            colors_assigned[course] = 0    # Backtrack
 
     return False
 ```
 
-### Strategy
-1. **Greedy Coloring** — instant valid solution as upper bound
-2. **Backtracking** — tries to reduce by 1 color (5s time limit)
-3. Returns the best result found
+**Strategy:**
+1. Greedy Coloring — instant valid upper bound
+2. Backtracking — tries to reduce by 1 color (5s limit)
+3. Returns best result found
+
+---
+
+## Program Output
+
+```
+============================================================
+  UNIVERSITY EXAM SCHEDULER — Graph Coloring (Backtracking)
+============================================================
+
+Generating conflict graph for 50 courses...
+Total courses (vertices) : 50
+Total conflicts (edges)  : 203
+
+Adjacency Matrix (showing first 15 of 50 courses):
+      C01 C02 C03 C04 C05 C06 C07 C08 C09 C10 C11 C12 C13 C14 C15 ...
+C01 [  0   0   1   0   1   0   0   0   1   0   1   0   0   1   0   ...]
+C02 [  0   0   0   0   1   0   0   0   0   0   0   0   0   0   0   ...]
+C03 [  1   0   0   0   0   0   1   0   0   0   0   0   1   0   0   ...]
+C04 [  0   0   0   0   0   1   0   0   1   0   0   0   0   0   1   ...]
+C05 [  1   1   0   0   0   0   0   1   0   0   0   0   1   0   0   ...]
+C06 [  0   0   0   1   0   0   1   0   1   0   0   0   0   0   0   ...]
+C07 [  0   0   1   0   0   1   0   0   0   1   0   0   0   0   0   ...]
+C08 [  0   0   0   0   1   0   0   0   0   0   1   0   0   0   0   ...]
+C09 [  1   0   0   1   0   1   0   0   0   0   0   0   0   1   0   ...]
+C10 [  0   0   0   0   0   0   1   0   0   0   1   1   0   0   0   ...]
+C11 [  1   0   0   0   0   0   0   1   0   1   0   0   0   0   0   ...]
+C12 [  0   0   0   0   0   0   0   0   0   1   0   0   0   0   0   ...]
+C13 [  0   0   1   0   1   0   0   0   0   0   0   0   0   0   0   ...]
+C14 [  1   0   0   0   0   0   0   0   1   0   0   0   0   0   0   ...]
+C15 [  0   0   0   1   0   0   0   0   0   0   0   0   0   0   0   ...]
+  ...
+
+Searching for minimum time slots...
+  Greedy solution: 7 slots. Trying to reduce by 1 with backtracking (5s limit)...
+  Backtracking succeeded: reduced to 6 slots.
+Result: 6 time slots needed
+
+==================================================
+EXAM SCHEDULE — TIME SLOT ASSIGNMENTS
+==================================================
+
+Time Slot 1:
+  Course  1  →  Slot 1
+  Course  2  →  Slot 1
+  Course  4  →  Slot 1
+  Course  7  →  Slot 1
+  Course  8  →  Slot 1
+  Course 12  →  Slot 1
+  Course 13  →  Slot 1
+  Course 17  →  Slot 1
+  Course 18  →  Slot 1
+  Course 23  →  Slot 1
+  Course 24  →  Slot 1
+  Course 32  →  Slot 1
+  Course 36  →  Slot 1
+  Course 39  →  Slot 1
+
+Time Slot 2:
+  Course  3  →  Slot 2
+  Course  5  →  Slot 2
+  Course  6  →  Slot 2
+  Course 10  →  Slot 2
+  Course 14  →  Slot 2
+  Course 15  →  Slot 2
+  Course 16  →  Slot 2
+  Course 26  →  Slot 2
+  Course 27  →  Slot 2
+  Course 34  →  Slot 2
+
+Time Slot 3:
+  Course  9  →  Slot 3
+  Course 11  →  Slot 3
+  Course 19  →  Slot 3
+  Course 20  →  Slot 3
+  Course 22  →  Slot 3
+  Course 25  →  Slot 3
+  Course 31  →  Slot 3
+  Course 37  →  Slot 3
+  Course 38  →  Slot 3
+  Course 44  →  Slot 3
+  Course 45  →  Slot 3
+  Course 47  →  Slot 3
+  Course 50  →  Slot 3
+
+Time Slot 4:
+  Course 21  →  Slot 4
+  Course 28  →  Slot 4
+  Course 29  →  Slot 4
+  Course 30  →  Slot 4
+  Course 35  →  Slot 4
+  Course 41  →  Slot 4
+
+Time Slot 5:
+  Course 33  →  Slot 5
+  Course 40  →  Slot 5
+  Course 46  →  Slot 5
+  Course 48  →  Slot 5
+
+Time Slot 6:
+  Course 42  →  Slot 6
+  Course 43  →  Slot 6
+  Course 49  →  Slot 6
+
+==================================================
+Total courses scheduled : 50
+Time slots used         : 6
+==================================================
+
+Conflict Verification Report:
+  No conflicts detected. Schedule is valid.
+
+Execution time: 0.0029 seconds
+
+============================================================
+COMPLEXITY ANALYSIS
+============================================================
+Worst case time complexity : O(m^n)
+  m = number of colors (time slots) = 6
+  n = number of vertices (courses)  = 50
+
+Backtracking prunes branches where a conflict is detected
+early, avoiding the full O(m^n) search in most cases.
+
+REAL-WORLD APPLICATIONS OF GRAPH COLORING:
+  - Exam Scheduling       (this program)
+  - Register Allocation   (compilers assign CPU registers)
+  - Frequency Assignment  (mobile network channels)
+  - Map Coloring          (adjacent regions, different colors)
+============================================================
+```
 
 ---
 
@@ -74,47 +197,9 @@ def _backtrack(graph, num_colors, colors_assigned, course, deadline):
 | | Value |
 |---|---|
 | Worst case | O(m^n) |
-| m = colors | ~5 for 50 courses |
+| m = time slots | 6 |
 | n = courses | 50 |
-| Backtracking | Prunes on first conflict |
-
----
-
-## Usage
-
-```bash
-# Interactive mode
-python exam_scheduler.py
-
-# Non-interactive test
-python test_scheduler.py
-
-# Generate PDF report
-python generate_pdf_report.py
-```
-
----
-
-## Sample Output
-
-```
-============================================================
-  UNIVERSITY EXAM SCHEDULER — Graph Coloring (Backtracking)
-============================================================
-
-Total courses (vertices) : 50
-Total conflicts (edges)  : 203
-
-Greedy solution: 6 slots. Trying to reduce by 1 (5s limit)...
-Backtracking succeeded: reduced to 5 slots.
-
-Time Slot 1:  Course 2, 3, 8, 12 ...
-Time Slot 2:  Course 1, 4, 9, 16 ...
-...
-
-No conflicts detected. Schedule is valid.
-Execution time: 0.0312 seconds
-```
+| Actual runtime | 0.0029 seconds |
 
 ---
 
@@ -127,10 +212,13 @@ Execution time: 0.0312 seconds
 
 ---
 
-## Requirements
+## Usage
 
-- Python 3.x
-- `reportlab` (for PDF generation only): `pip install reportlab`
+```bash
+python exam_scheduler.py       # interactive
+python test_scheduler.py       # auto run
+python generate_pdf_report.py  # generate PDF
+```
 
 ---
 
@@ -138,10 +226,7 @@ Execution time: 0.0312 seconds
 
 **Course:** Design and Analysis of Algorithms  
 **Assignment:** Q6 — Graph Coloring (Exam Scheduling)  
-**Language:** Python  
-**Data Structure:** Adjacency Matrix (50×50)
-
----
+**Institution:** Aksum University — Department of Computer Science  
 
 ## References
 
