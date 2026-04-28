@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Q6 – Graph Coloring: Exam Scheduling Report</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f0f4f8;
+      color: #1a202c;
+      line-height: 1.7;
+    }
+
+    header {
+      background: linear-gradient(135deg, #1a365d, #2b6cb0);
+      color: white;
+      padding: 48px 40px 36px;
+      text-align: center;
+    }
+
+    header h1 { font-size: 2rem; margin-bottom: 8px; }
+    header p  { font-size: 1rem; opacity: 0.85; }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      border-radius: 20px;
+      padding: 4px 14px;
+      font-size: 0.85rem;
+      margin-top: 12px;
+    }
+
+    main {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+
+    section {
+      background: white;
+      border-radius: 10px;
+      padding: 32px;
+      margin-bottom: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+
+    h2 {
+      font-size: 1.25rem;
+      color: #2b6cb0;
+      border-left: 4px solid #2b6cb0;
+      padding-left: 12px;
+      margin-bottom: 18px;
+    }
+
+    h3 {
+      font-size: 1rem;
+      color: #2d3748;
+      margin: 18px 0 8px;
+    }
+
+    p { margin-bottom: 12px; color: #4a5568; }
+
+    ul, ol {
+      padding-left: 22px;
+      color: #4a5568;
+      margin-bottom: 12px;
+    }
+
+    li { margin-bottom: 6px; }
+
+    /* Info grid */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      margin-top: 8px;
+    }
+
+    .info-card {
+      background: #ebf8ff;
+      border: 1px solid #bee3f8;
+      border-radius: 8px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .info-card .value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #2b6cb0;
+    }
+
+    .info-card .label {
+      font-size: 0.8rem;
+      color: #718096;
+      margin-top: 4px;
+    }
+
+    /* Code block */
+    pre {
+      background: #1a202c;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      margin: 12px 0;
+    }
+
+    code { font-family: 'Courier New', monospace; }
+
+    /* Matrix table */
+    .matrix-wrap { overflow-x: auto; margin: 12px 0; }
+
+    table {
+      border-collapse: collapse;
+      font-size: 0.78rem;
+      min-width: 100%;
+    }
+
+    th {
+      background: #2b6cb0;
+      color: white;
+      padding: 6px 10px;
+      text-align: center;
+    }
+
+    td {
+      border: 1px solid #e2e8f0;
+      padding: 5px 10px;
+      text-align: center;
+    }
+
+    td.conflict { background: #fed7d7; color: #c53030; font-weight: 600; }
+    td.no-conflict { background: #f7fafc; color: #718096; }
+    tr:hover td { background: #ebf8ff; }
+
+    /* Schedule slots */
+    .slots-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .slot-card {
+      border-radius: 8px;
+      padding: 14px;
+      border: 2px solid;
+    }
+
+    .slot-card h4 { font-size: 0.85rem; margin-bottom: 8px; }
+    .slot-card .course-tag {
+      display: inline-block;
+      background: rgba(255,255,255,0.6);
+      border-radius: 4px;
+      padding: 2px 8px;
+      font-size: 0.78rem;
+      margin: 2px;
+    }
+
+    .slot-0 { background: #fff5f5; border-color: #fc8181; color: #c53030; }
+    .slot-1 { background: #fffff0; border-color: #f6e05e; color: #744210; }
+    .slot-2 { background: #f0fff4; border-color: #68d391; color: #276749; }
+    .slot-3 { background: #ebf8ff; border-color: #63b3ed; color: #2c5282; }
+    .slot-4 { background: #faf5ff; border-color: #b794f4; color: #553c9a; }
+    .slot-5 { background: #fff8f1; border-color: #f6ad55; color: #7b341e; }
+
+    /* Complexity */
+    .complexity-box {
+      background: #1a202c;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 24px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 2;
+    }
+
+    .complexity-box .highlight { color: #f6e05e; font-weight: 700; }
+
+    /* Applications */
+    .app-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .app-card {
+      border-radius: 8px;
+      padding: 18px;
+      text-align: center;
+    }
+
+    .app-card .icon { font-size: 2rem; margin-bottom: 8px; }
+    .app-card h4 { font-size: 0.9rem; font-weight: 600; margin-bottom: 4px; }
+    .app-card p { font-size: 0.8rem; margin: 0; }
+
+    .app-1 { background: #fff5f5; }
+    .app-2 { background: #f0fff4; }
+    .app-3 { background: #ebf8ff; }
+    .app-4 { background: #faf5ff; }
+
+    /* Functions table */
+    .func-table { width: 100%; border-collapse: collapse; margin-top: 12px; }
+    .func-table th { background: #2b6cb0; color: white; padding: 10px 14px; text-align: left; }
+    .func-table td { border: 1px solid #e2e8f0; padding: 10px 14px; vertical-align: top; }
+    .func-table tr:nth-child(even) td { background: #f7fafc; }
+    .func-name { font-family: 'Courier New', monospace; color: #2b6cb0; font-weight: 600; }
+
+    footer {
+      text-align: center;
+      padding: 28px;
+      color: #718096;
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Graph Coloring — University Exam Scheduling</h1>
+  <p>Algorithm Design Assignment &nbsp;|&nbsp; Q6 Report</p>
+  <span class="badge">Python &nbsp;·&nbsp; Backtracking &nbsp;·&nbsp; Adjacency Matrix</span>
+</header>
+
+<main>
+
+  <!-- 1. Overview -->
+  <section>
+    <h2>1. Problem Overview</h2>
+    <p>
+      A university must schedule final exams so that no student sits two exams at the same time.
+      If two courses share at least one student, they <strong>conflict</strong> and cannot be
+      assigned the same time slot.
+    </p>
+    <p>This is modeled as a <strong>Graph Coloring</strong> problem:</p>
+    <ul>
+      <li><strong>Vertices</strong> — Courses</li>
+      <li><strong>Edges</strong> — Conflicts (shared students between two courses)</li>
+      <li><strong>Colors</strong> — Exam time slots</li>
+    </ul>
+    <p>
+      The goal is to assign the <em>minimum number of colors (time slots)</em> such that
+      no two adjacent vertices (conflicting courses) share the same color.
+    </p>
+  </section>
+
+  <!-- 2. Dataset Stats -->
+  <section>
+    <h2>2. Dataset Statistics</h2>
+    <div class="info-grid">
+      <div class="info-card">
+        <div class="value">50</div>
+        <div class="label">Courses (Vertices)</div>
+      </div>
+      <div class="info-card">
+        <div class="value">50×50</div>
+        <div class="label">Adjacency Matrix Size</div>
+      </div>
+      <div class="info-card">
+        <div class="value">~203</div>
+        <div class="label">Conflicts (Edges)</div>
+      </div>
+      <div class="info-card">
+        <div class="value">15%</div>
+        <div class="label">Base Conflict Probability</div>
+      </div>
+    </div>
+    <p style="margin-top:16px;">
+      Conflicts are generated randomly with a higher probability (25%) for nearby course numbers,
+      simulating realistic scenarios where adjacent courses in a curriculum share more students.
+    </p>
+  </section>
+
+  <!-- 3. Adjacency Matrix -->
+  <section>
+    <h2>3. Adjacency Matrix (Sample — first 10 courses)</h2>
+    <p>
+      The full matrix is 50×50. A value of <strong>1</strong> means the two courses conflict;
+      <strong>0</strong> means no conflict. The matrix is symmetric (undirected graph).
+    </p>
+    <div class="matrix-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>C01</th><th>C02</th><th>C03</th><th>C04</th><th>C05</th>
+            <th>C06</th><th>C07</th><th>C08</th><th>C09</th><th>C10</th>
+          </tr>
+        </thead>
+        <tbody id="matrix-body">
+          <!-- filled by JS -->
+        </tbody>
+      </table>
+    </div>
+    <p style="margin-top:10px; font-size:0.82rem; color:#718096;">
+      Red cells indicate a conflict between the two courses.
+    </p>
+  </section>
+
+  <!-- 4. Algorithm -->
+  <section>
+    <h2>4. Algorithm — Backtracking Graph Coloring</h2>
+    <p>
+      The program uses a <strong>Backtracking</strong> algorithm to assign time slots.
+      It tries each color for the current course, checks safety, recurses, and backtracks
+      if no valid assignment is found.
+    </p>
+
+    <h3>Core Backtracking Logic</h3>
+    <pre><code>def _backtrack(graph, num_colors, colors_assigned, course, deadline):
+    if course == len(graph):
+        return True          # All courses colored — solution found
+
+    if time.time() > deadline:
+        return False         # Time limit reached
+
+    for color in range(1, num_colors + 1):
+        if is_safe(graph, course, color, colors_assigned):
+            colors_assigned[course] = color
+            if _backtrack(graph, num_colors, colors_assigned, course + 1, deadline):
+                return True
+            colors_assigned[course] = 0   # Backtrack
+
+    return False</code></pre>
+
+    <h3>Safety Check</h3>
+    <pre><code>def is_safe(graph, course, color, colors_assigned):
+    for neighbor in range(len(graph)):
+        if graph[course][neighbor] == 1 and colors_assigned[neighbor] == color:
+            return False
+    return True</code></pre>
+
+    <h3>Strategy</h3>
+    <ol>
+      <li>Run <strong>Greedy Coloring</strong> first — gives a valid solution instantly as an upper bound.</li>
+      <li>Run <strong>Backtracking</strong> to try reducing by 1 color (with a 5-second time limit).</li>
+      <li>Return the best solution found.</li>
+    </ol>
+  </section>
+
+  <!-- 5. Sample Schedule Output -->
+  <section>
+    <h2>5. Sample Schedule Output</h2>
+    <p>Courses grouped by assigned time slot (example with 5 slots for 50 courses):</p>
+    <div class="slots-grid">
+      <div class="slot-card slot-0">
+        <h4>⏰ Time Slot 1</h4>
+        <span class="course-tag">Course 2</span>
+        <span class="course-tag">Course 3</span>
+        <span class="course-tag">Course 8</span>
+        <span class="course-tag">Course 12</span>
+        <span class="course-tag">Course 15</span>
+        <span class="course-tag">Course 20</span>
+      </div>
+      <div class="slot-card slot-1">
+        <h4>⏰ Time Slot 2</h4>
+        <span class="course-tag">Course 1</span>
+        <span class="course-tag">Course 4</span>
+        <span class="course-tag">Course 9</span>
+        <span class="course-tag">Course 16</span>
+        <span class="course-tag">Course 22</span>
+        <span class="course-tag">Course 30</span>
+      </div>
+      <div class="slot-card slot-2">
+        <h4>⏰ Time Slot 3</h4>
+        <span class="course-tag">Course 5</span>
+        <span class="course-tag">Course 10</span>
+        <span class="course-tag">Course 17</span>
+        <span class="course-tag">Course 25</span>
+        <span class="course-tag">Course 33</span>
+        <span class="course-tag">Course 40</span>
+      </div>
+      <div class="slot-card slot-3">
+        <h4>⏰ Time Slot 4</h4>
+        <span class="course-tag">Course 6</span>
+        <span class="course-tag">Course 11</span>
+        <span class="course-tag">Course 18</span>
+        <span class="course-tag">Course 26</span>
+        <span class="course-tag">Course 35</span>
+        <span class="course-tag">Course 45</span>
+      </div>
+      <div class="slot-card slot-4">
+        <h4>⏰ Time Slot 5</h4>
+        <span class="course-tag">Course 7</span>
+        <span class="course-tag">Course 13</span>
+        <span class="course-tag">Course 19</span>
+        <span class="course-tag">Course 28</span>
+        <span class="course-tag">Course 38</span>
+        <span class="course-tag">Course 50</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. Program Structure -->
+  <section>
+    <h2>6. Program Structure</h2>
+    <table class="func-table">
+      <thead>
+        <tr><th>Function</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="func-name">create_graph()</span></td>
+          <td>Generates a 50×50 adjacency matrix with realistic random conflicts</td>
+        </tr>
+        <tr>
+          <td><span class="func-name">is_safe()</span></td>
+          <td>Checks if assigning a color to a course causes any conflict with neighbors</td>
+        </tr>
+        <tr>
+          <td><span class="func-name">_backtrack()</span></td>
+          <td>Recursive backtracking core — tries colors, recurses, backtracks on failure</td>
+        </tr>
+        <tr>
+          <td><span class="func-name">solve_coloring()</span></td>
+          <td>Wrapper for backtracking with a configurable time limit</td>
+        </tr>
+        <tr>
+          <td><span class="func-name">greedy_coloring()</span></td>
+          <td>Fast greedy solution used as upper bound for the chromatic number search</td>
+        </tr>
+        <tr>
+          <td><span class="func-name">find_chromatic_number()</span></td>
+          <td>Finds minimum time slots needed using greedy + backtracking refinement</td>
+        </tr>
+        <tr>
+          <td><span class="func-name">display_matrix()</span></td>
+          <td>Prints the adjacency matrix (truncated for readability)</td>
+        </tr>
+        <tr>
+          <td><span class="func-name">display_result()</span></td>
+          <td>Prints the final exam schedule grouped by time slot</td>
+        </tr>
+        <tr>
+          <td><span class="func-name">conflict_report()</span></td>
+          <td>Verifies the solution — confirms no two conflicting courses share a slot</td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- 7. Complexity -->
+  <section>
+    <h2>7. Complexity Analysis</h2>
+    <div class="complexity-box">
+      <span class="highlight">Worst Case Time Complexity:  O(m ^ n)</span><br><br>
+      &nbsp;&nbsp;m  =  number of colors (time slots)<br>
+      &nbsp;&nbsp;n  =  number of vertices (courses)<br><br>
+      <span class="highlight">Example:</span>  m=5, n=50  →  5^50 ≈ 10^34 operations (theoretical max)<br><br>
+      <span class="highlight">Backtracking optimization:</span><br>
+      &nbsp;&nbsp;· Prunes branches the moment a conflict is detected<br>
+      &nbsp;&nbsp;· Avoids exploring the full exponential search tree<br>
+      &nbsp;&nbsp;· Greedy upper bound reduces the search range significantly<br>
+      &nbsp;&nbsp;· Time limit prevents worst-case hangs in practice
+    </div>
+  </section>
+
+  <!-- 8. Real-World Applications -->
+  <section>
+    <h2>8. Real-World Applications</h2>
+    <div class="app-grid">
+      <div class="app-card app-1">
+        <div class="icon">🎓</div>
+        <h4>Exam Scheduling</h4>
+        <p>Assign exam slots so no student has two exams at the same time</p>
+      </div>
+      <div class="app-card app-2">
+        <div class="icon">⚙️</div>
+        <h4>Register Allocation</h4>
+        <p>Compilers assign CPU registers to variables without conflicts</p>
+      </div>
+      <div class="app-card app-3">
+        <div class="icon">📡</div>
+        <h4>Frequency Assignment</h4>
+        <p>Mobile networks assign frequencies to avoid interference between towers</p>
+      </div>
+      <div class="app-card app-4">
+        <div class="icon">🗺️</div>
+        <h4>Map Coloring</h4>
+        <p>Color geographic regions so no two adjacent regions share a color</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 9. How to Run -->
+  <section>
+    <h2>9. How to Run</h2>
+    <h3>Interactive mode</h3>
+    <pre><code>python exam_scheduler.py</code></pre>
+    <h3>Non-interactive test</h3>
+    <pre><code>python test_scheduler.py</code></pre>
+    <p>No external dependencies — uses Python standard library only.</p>
+  </section>
+
+</main>
+
+<footer>
+  Q6 – Graph Coloring (Exam Scheduling) &nbsp;·&nbsp; Algorithm Design Assignment
+</footer>
+
+<script>
+  // Generate a sample 10x10 adjacency matrix for display
+  const seed = 42;
+  function seededRand(s) {
+    let x = Math.sin(s) * 10000;
+    return x - Math.floor(x);
+  }
+
+  const n = 10;
+  const matrix = Array.from({length: n}, () => Array(n).fill(0));
+  let s = seed;
+  for (let i = 0; i < n; i++) {
+    for (let j = i + 1; j < n; j++) {
+      s++;
+      const prob = Math.abs(i - j) <= 5 ? 0.25 : 0.15;
+      if (seededRand(s) < prob) {
+        matrix[i][j] = 1;
+        matrix[j][i] = 1;
+      }
+    }
+  }
+
+  const tbody = document.getElementById('matrix-body');
+  for (let i = 0; i < n; i++) {
+    const tr = document.createElement('tr');
+    const th = document.createElement('th');
+    th.textContent = `C${String(i+1).padStart(2,'0')}`;
+    tr.appendChild(th);
+    for (let j = 0; j < n; j++) {
+      const td = document.createElement('td');
+      td.textContent = matrix[i][j];
+      td.className = matrix[i][j] === 1 ? 'conflict' : 'no-conflict';
+      tr.appendChild(td);
+    }
+    tbody.appendChild(tr);
+  }
+</script>
+
+</body>
+</html>
