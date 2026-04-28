@@ -2,6 +2,8 @@
 
 > Q6 Algorithm Design Assignment — Backtracking Graph Coloring with Adjacency Matrix
 
+📄 **[View Full PDF Report](https://tsegayt212-cyber.github.io/2ND_ALGORIYHM_ASSIGHMENT/Q6_Graph_Coloring_Report.pdf)**
+
 ---
 
 ## Project Overview
